@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Leaf, Zap, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -18,9 +19,16 @@ const Hero = () => {
             </div>
             <span className="text-xl font-bold text-foreground">CarbonTrack</span>
           </div>
-          <Button variant="heroOutline" size="lg">
-            Get Early Access
-          </Button>
+          <div className="flex items-center gap-6">
+            <Link to="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Login
+            </Link>
+            <Link to="/signup">
+              <Button variant="heroOutline" size="lg">
+                Get Early Access
+              </Button>
+            </Link>
+          </div>
         </nav>
 
         <div className="max-w-4xl mx-auto text-center pt-20">
@@ -114,7 +122,7 @@ const DashboardPreview = () => {
           <div className="flex items-end gap-2 h-24">
             {[65, 72, 58, 80, 68, 55, 48].map((height, i) => (
               <div key={i} className="flex-1 bg-primary/20 rounded-t-lg relative overflow-hidden">
-                <div 
+                <div
                   className="absolute bottom-0 left-0 right-0 gradient-bg rounded-t-lg transition-all duration-500"
                   style={{ height: `${height}%` }}
                 />
@@ -133,7 +141,7 @@ const DashboardPreview = () => {
                 <span className="font-medium text-foreground">{area.value}%</span>
               </div>
               <div className="h-2 bg-muted rounded-full overflow-hidden">
-                <div 
+                <div
                   className={`h-full ${area.color} rounded-full transition-all duration-700`}
                   style={{ width: `${area.value}%` }}
                 />
