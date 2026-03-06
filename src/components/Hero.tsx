@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Leaf, Zap, Clock } from "lucide-react";
+import { ArrowRight, Zap, Clock, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
+import logo from "@/assets/logo.png";
 
 const Hero = () => {
   return (
