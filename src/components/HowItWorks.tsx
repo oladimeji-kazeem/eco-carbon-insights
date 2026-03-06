@@ -60,10 +60,10 @@ const HowItWorks = () => {
         </div>
 
         <div className="text-center mt-12">
-          <div className="inline-flex items-center gap-2 text-primary font-medium hover:gap-4 transition-all cursor-pointer">
+          <a href="/app/upload" className="inline-flex items-center gap-2 text-primary font-medium hover:gap-4 transition-all cursor-pointer">
             <span>See detailed walkthrough</span>
             <ArrowRight className="w-4 h-4" />
-          </div>
+          </a>
         </div>
       </div>
     </section>
