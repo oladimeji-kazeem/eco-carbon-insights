@@ -46,13 +46,17 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: '0.3s' }}>
-            <Button variant="hero" size="xl" className="w-full sm:w-auto">
-              Start Free Analysis
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-            <Button variant="heroOutline" size="xl" className="w-full sm:w-auto">
-              See How It Works
-            </Button>
+            <Link to="/app/upload" className="w-full sm:w-auto">
+              <Button variant="hero" size="xl" className="w-full">
+                Start Free Analysis
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </Link>
+            <a href="#how-it-works" className="w-full sm:w-auto">
+              <Button variant="heroOutline" size="xl" className="w-full">
+                See How It Works
+              </Button>
+            </a>
           </div>
 
           <div className="flex items-center justify-center gap-8 mt-12 text-sm text-muted-foreground animate-fade-up" style={{ animationDelay: '0.4s' }}>

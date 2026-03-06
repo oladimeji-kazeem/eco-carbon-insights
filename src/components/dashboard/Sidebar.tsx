@@ -1,5 +1,6 @@
 
 import { Home, Settings, BarChart3, LogOut, Activity, Upload } from "lucide-react";
+import logo from "@/assets/logo.png";
 import {
   Sidebar,
   SidebarContent,
