@@ -1,5 +1,6 @@
 import { Upload, Cpu, BarChart3, ArrowRight } from "lucide-react";
 
+
 const steps = [
   {
     icon: Upload,
