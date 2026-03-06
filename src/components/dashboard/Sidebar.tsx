@@ -1,5 +1,5 @@
 
-import { Home, Settings, BarChart3, LogOut, Activity } from "lucide-react";
+import { Home, Settings, BarChart3, LogOut, Activity, Upload } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +18,11 @@ const items = [
     title: "Dashboard",
     url: "/app",
     icon: Home,
+  },
+  {
+    title: "Upload & Analyze",
+    url: "/app/upload",
+    icon: Upload,
   },
   {
     title: "Analytics",
@@ -43,7 +48,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <div className="p-4">
-          <h1 className="text-xl font-bold text-primary">SaaS App</h1>
+          <h1 className="text-xl font-bold text-primary">CarbonTrack</h1>
         </div>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>

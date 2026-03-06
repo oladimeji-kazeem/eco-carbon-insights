@@ -12,6 +12,7 @@ import Settings from "./pages/dashboard/Settings";
 import OperationsDashboard from "./pages/operations/OperationsDashboard";
 import DataSources from "./pages/operations/DataSources";
 import AnalyticsDashboard from "./pages/analytics/AnalyticsDashboard";
+import UploadAnalysisPage from "./pages/dashboard/UploadAnalysisPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
 
           <Route path="/app" element={<DashboardLayout />}>
             <Route index element={<Dashboard />} />
+            <Route path="upload" element={<UploadAnalysisPage />} />
             <Route path="analytics" element={<AnalyticsDashboard />} />
             <Route path="settings" element={<Settings />} />
             <Route path="operations">
