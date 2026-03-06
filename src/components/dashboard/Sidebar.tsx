@@ -1,5 +1,6 @@
 
 import { Home, Settings, BarChart3, LogOut, Activity, Upload } from "lucide-react";
+import logo from "@/assets/logo.png";
 import {
   Sidebar,
   SidebarContent,
@@ -47,7 +48,8 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
-        <div className="p-4">
+        <div className="p-4 flex items-center gap-2">
+          <img src={logo} alt="CarbonTrack logo" className="w-8 h-8" />
           <h1 className="text-xl font-bold text-primary">CarbonTrack</h1>
         </div>
         <SidebarGroup>

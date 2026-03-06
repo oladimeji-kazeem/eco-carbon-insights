@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Leaf, Zap, Clock } from "lucide-react";
+import { ArrowRight, Zap, Clock, Leaf } from "lucide-react";
 import { Link } from "react-router-dom";
+import logo from "@/assets/logo.png";
 
 const Hero = () => {
   return (
@@ -14,9 +15,7 @@ const Hero = () => {
       <div className="relative container mx-auto px-6 pt-32 pb-20">
         <nav className="absolute top-0 left-0 right-0 flex items-center justify-between py-6 px-6">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
-              <Leaf className="w-5 h-5 text-primary-foreground" />
-            </div>
+            <img src={logo} alt="CarbonTrack logo" className="w-10 h-10" />
             <span className="text-xl font-bold text-foreground">CarbonTrack</span>
           </div>
           <div className="flex items-center gap-6">
@@ -47,13 +46,17 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: '0.3s' }}>
-            <Button variant="hero" size="xl" className="w-full sm:w-auto">
-              Start Free Analysis
-              <ArrowRight className="w-5 h-5" />
-            </Button>
-            <Button variant="heroOutline" size="xl" className="w-full sm:w-auto">
-              See How It Works
-            </Button>
+            <Link to="/app/upload" className="w-full sm:w-auto">
+              <Button variant="hero" size="xl" className="w-full">
+                Start Free Analysis
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </Link>
+            <a href="#how-it-works" className="w-full sm:w-auto">
+              <Button variant="heroOutline" size="xl" className="w-full">
+                See How It Works
+              </Button>
+            </a>
           </div>
 
           <div className="flex items-center justify-center gap-8 mt-12 text-sm text-muted-foreground animate-fade-up" style={{ animationDelay: '0.4s' }}>

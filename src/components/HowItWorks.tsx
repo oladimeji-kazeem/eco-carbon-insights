@@ -1,5 +1,6 @@
 import { Upload, Cpu, BarChart3, ArrowRight } from "lucide-react";
 
+
 const steps = [
   {
     icon: Upload,
@@ -23,7 +24,7 @@ const steps = [
 
 const HowItWorks = () => {
   return (
-    <section className="py-24 bg-background">
+    <section id="how-it-works" className="py-24 bg-background">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -59,10 +60,10 @@ const HowItWorks = () => {
         </div>
 
         <div className="text-center mt-12">
-          <div className="inline-flex items-center gap-2 text-primary font-medium hover:gap-4 transition-all cursor-pointer">
+          <a href="/app/upload" className="inline-flex items-center gap-2 text-primary font-medium hover:gap-4 transition-all cursor-pointer">
             <span>See detailed walkthrough</span>
             <ArrowRight className="w-4 h-4" />
-          </div>
+          </a>
         </div>
       </div>
     </section>
