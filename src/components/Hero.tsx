@@ -15,9 +15,7 @@ const Hero = () => {
       <div className="relative container mx-auto px-6 pt-32 pb-20">
         <nav className="absolute top-0 left-0 right-0 flex items-center justify-between py-6 px-6">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
-              <Leaf className="w-5 h-5 text-primary-foreground" />
-            </div>
+            <img src={logo} alt="CarbonTrack logo" className="w-10 h-10" />
             <span className="text-xl font-bold text-foreground">CarbonTrack</span>
           </div>
           <div className="flex items-center gap-6">
