@@ -48,7 +48,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <div className="p-4">
-          <h1 className="text-xl font-bold text-primary">SaaS App</h1>
+          <h1 className="text-xl font-bold text-primary">CarbonTrack</h1>
         </div>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
