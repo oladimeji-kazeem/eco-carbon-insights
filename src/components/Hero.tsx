@@ -73,8 +73,86 @@ const Hero = () => {
             </div>
           </div>
         </div>
+
+        {/* Mission Preview */}
+        <div className="mt-20 max-w-5xl mx-auto animate-fade-up" style={{ animationDelay: '0.5s' }}>
+          <div className="relative">
+            <div className="absolute inset-0 gradient-bg rounded-2xl blur-xl opacity-20 scale-105" />
+            <div className="relative bg-card rounded-2xl shadow-soft border border-border overflow-hidden">
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
+                <div className="w-3 h-3 rounded-full bg-destructive/60" />
+                <div className="w-3 h-3 rounded-full bg-yellow-400/60" />
+                <div className="w-3 h-3 rounded-full bg-primary/60" />
+              </div>
+              <div className="p-6 md:p-8">
+                <MissionPreview />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
+  );
+};
+
+const MissionPreview = () => {
+  const focusAreas = [
+    { name: "Community outreach & education", value: 90, color: "bg-primary" },
+    { name: "Local sustainability infrastructure", value: 75, color: "bg-accent" },
+    { name: "Cross-sector collaboration", value: 65, color: "bg-primary/60" },
+    { name: "Centres of excellence", value: 50, color: "bg-accent/60" },
+  ];
+
+  return (
+    <div className="grid md:grid-cols-3 gap-6">
+      <div className="md:col-span-2 space-y-4">
+        <h3 className="text-lg font-semibold text-foreground">Our Mission in Action</h3>
+        <div className="grid grid-cols-3 gap-4">
+          <div className="bg-muted/50 rounded-xl p-4">
+            <p className="text-sm text-muted-foreground">Inform</p>
+            <p className="text-2xl font-bold gradient-text">Knowledge</p>
+            <p className="text-xs text-muted-foreground">tools & resources</p>
+          </div>
+          <div className="bg-muted/50 rounded-xl p-4">
+            <p className="text-sm text-muted-foreground">Inspire</p>
+            <p className="text-2xl font-bold gradient-text">Action</p>
+            <p className="text-xs text-muted-foreground">stories & outreach</p>
+          </div>
+          <div className="bg-muted/50 rounded-xl p-4">
+            <p className="text-sm text-muted-foreground">Enable</p>
+            <p className="text-2xl font-bold gradient-text">Impact</p>
+            <p className="text-xs text-muted-foreground">infrastructure & support</p>
+          </div>
+        </div>
+        <div className="bg-muted/50 rounded-xl p-4">
+          <p className="text-sm text-muted-foreground mb-3">Focus Areas</p>
+          <div className="space-y-3">
+            {focusAreas.map((area) => (
+              <div key={area.name} className="space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">{area.name}</span>
+                  <span className="font-medium text-foreground">{area.value}%</span>
+                </div>
+                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                  <div className={`h-full ${area.color} rounded-full transition-all duration-700`} style={{ width: `${area.value}%` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-foreground">Live Programmes</h3>
+        <div className="space-y-3">
+          {["Sustainability Centre", "Climate Action Plans", "SW Climate Action Programme", "Community Climate Action", "Eco-Save App"].map((p) => (
+            <div key={p} className="flex items-center gap-2 text-sm">
+              <div className="w-2 h-2 rounded-full bg-primary" />
+              <span className="text-foreground">{p}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
