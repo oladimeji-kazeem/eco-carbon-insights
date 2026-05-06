@@ -1,14 +1,22 @@
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
-  Upload, Loader2, FileText, CheckCircle2, AlertTriangle, Zap,
-  TrendingDown, BarChart3, Lightbulb, Leaf
+  Upload, Loader2, FileText, CheckCircle2, Zap,
+  TrendingDown, BarChart3, Lightbulb, Leaf, Compass, ArrowRight
 } from "lucide-react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
+import { programmesForCategory, type Programme, type Pillar } from "@/data/programmes";
+
+const PILLAR_DESCRIPTIONS: Record<Pillar, string> = {
+  Inform: "Knowledge, tools and data so you understand your impact.",
+  Inspire: "Stories and examples that motivate action.",
+  Enable: "Practical infrastructure and support to take action.",
+};
 
 interface AnalysisResult {
   id: string;
