@@ -47,11 +47,10 @@ const CTA = () => {
 
             <div className="relative">
               <h2 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-4">
-                Interested in Building This Together?
+                Help us help our planet
               </h2>
               <p className="text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8">
-                I'm looking for collaborators passionate about sustainability and
-                problem-solving. Drop your info and let's connect.
+                Join our community of supporters, volunteers and partners. Sign up to hear about our programmes, events and ways to get involved.
               </p>
 
               {isSubmitted ? (
