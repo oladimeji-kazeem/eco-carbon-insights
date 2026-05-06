@@ -14,6 +14,7 @@ import DataSources from "./pages/operations/DataSources";
 import AnalyticsDashboard from "./pages/analytics/AnalyticsDashboard";
 import UploadAnalysisPage from "./pages/dashboard/UploadAnalysisPage";
 import NotFound from "./pages/NotFound";
+import ProgrammeDetail from "./pages/ProgrammeDetail";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/programmes/:slug" element={<ProgrammeDetail />} />
 
           <Route path="/app" element={<DashboardLayout />}>
             <Route index element={<Dashboard />} />
