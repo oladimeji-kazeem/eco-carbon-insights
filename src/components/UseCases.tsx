@@ -1,42 +1,30 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { TrendingDown, Zap, Truck, Building2, Coffee, ShoppingBag } from "lucide-react";
+import { Heart, Home, Users2, Briefcase } from "lucide-react";
 
 const useCases = [
   {
-    icon: Coffee,
-    business: "Local Café Chain",
-    type: "Food & Beverage",
-    savings: "32%",
-    co2: "4.2 tonnes",
-    insight: "Switched to renewable energy supplier and reduced food waste by optimizing inventory with AI predictions.",
-    timeline: "3 months",
+    icon: Home,
+    title: "Households",
+    description: "Practical tips and the Eco-Save app help families cut household carbon, water and waste — while saving money on bills.",
+    tag: "Live sustainably",
   },
   {
-    icon: Truck,
-    business: "Metro Logistics Co.",
-    type: "Transportation & Delivery",
-    savings: "28%",
-    co2: "18.7 tonnes",
-    insight: "Route optimization and fleet transition to hybrid vehicles cut fuel costs by $12K/year.",
-    timeline: "6 months",
+    icon: Users2,
+    title: "Communities",
+    description: "Community Climate Action Plans support local groups to reduce emissions together and build resilient, greener neighbourhoods.",
+    tag: "Act together",
   },
   {
-    icon: Building2,
-    business: "Greenfield Accounting",
-    type: "Professional Services",
-    savings: "45%",
-    co2: "2.1 tonnes",
-    insight: "Moved to paperless operations and identified HVAC inefficiency costing $3K extra annually.",
-    timeline: "2 months",
+    icon: Briefcase,
+    title: "Businesses & Organisations",
+    description: "Cross-sector collaboration and the South West Climate Action Programme help organisations innovate and embed sustainability.",
+    tag: "Work sustainably",
   },
   {
-    icon: ShoppingBag,
-    business: "Urban Boutique",
-    type: "Retail",
-    savings: "22%",
-    co2: "1.8 tonnes",
-    insight: "Consolidated shipping schedules and switched packaging to recycled materials.",
-    timeline: "4 months",
+    icon: Heart,
+    title: "Schools & Educators",
+    description: "Education programmes, tools and outreach inspire the next generation to take climate action and protect the environment.",
+    tag: "Inspire change",
   },
 ];
 
@@ -46,14 +34,14 @@ const UseCases = () => {
       <div className="container mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-            <TrendingDown className="w-4 h-4" />
-            Real Impact
+            <Heart className="w-4 h-4" />
+            Who We Work With
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            See What Businesses Like Yours Are Saving
+            Supporting Action at Every Level
           </h2>
           <p className="text-lg text-muted-foreground">
-            Real examples of small businesses that identified and reduced their carbon footprint — and saved money doing it.
+            From individual households to whole communities and organisations — together we can take meaningful action on climate change.
           </p>
         </div>
 
@@ -69,29 +57,11 @@ const UseCases = () => {
                     <useCase.icon className="h-6 w-6 text-primary-foreground" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-foreground text-lg">{useCase.business}</h3>
-                    <p className="text-sm text-muted-foreground">{useCase.type}</p>
+                    <h3 className="font-bold text-foreground text-lg">{useCase.title}</h3>
+                    <p className="text-sm text-primary">{useCase.tag}</p>
                   </div>
                 </div>
-
-                <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
-                  "{useCase.insight}"
-                </p>
-
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="bg-primary/5 rounded-lg p-3 text-center">
-                    <p className="text-xl font-bold text-primary">{useCase.savings}</p>
-                    <p className="text-xs text-muted-foreground">Reduction</p>
-                  </div>
-                  <div className="bg-primary/5 rounded-lg p-3 text-center">
-                    <p className="text-xl font-bold text-primary">{useCase.co2}</p>
-                    <p className="text-xs text-muted-foreground">CO₂ Saved</p>
-                  </div>
-                  <div className="bg-primary/5 rounded-lg p-3 text-center">
-                    <p className="text-xl font-bold text-primary">{useCase.timeline}</p>
-                    <p className="text-xs text-muted-foreground">Timeline</p>
-                  </div>
-                </div>
+                <p className="text-muted-foreground text-sm leading-relaxed">{useCase.description}</p>
               </CardContent>
             </Card>
           ))}
