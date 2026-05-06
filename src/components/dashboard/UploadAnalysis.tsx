@@ -233,8 +233,111 @@ export default function UploadAnalysis() {
               </ul>
             </CardContent>
           </Card>
+
+          {/* Eco Centre programme mapping */}
+          <ProgrammeMapping result={result} />
         </div>
       ))}
     </div>
+  );
+}
+
+interface MappingProps {
+  result: AnalysisResult;
+}
+
+function ProgrammeMapping({ result }: MappingProps) {
+  // Aggregate recommended programmes weighted by category percentage
+  const programmeScores = new Map<string, { programme: Programme; weight: number }>();
+  for (const cat of result.categories) {
+    for (const programme of programmesForCategory(cat.name)) {
+      const existing = programmeScores.get(programme.slug);
+      programmeScores.set(programme.slug, {
+        programme,
+        weight: (existing?.weight ?? 0) + cat.percentage,
+      });
+    }
+  }
+  const recommended = Array.from(programmeScores.values())
+    .sort((a, b) => b.weight - a.weight)
+    .slice(0, 3);
+
+  // Pillar coverage based on recommended programmes
+  const pillars: Pillar[] = ["Inform", "Inspire", "Enable"];
+  const pillarMatches = pillars.map((pillar) => ({
+    pillar,
+    programmes: recommended
+      .filter(({ programme }) => programme.pillars.includes(pillar))
+      .map((r) => r.programme),
+  }));
+
+  return (
+    <Card className="border-accent/20 bg-accent/5">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Compass className="h-5 w-5 text-primary" />
+          How Eco Centre can help
+        </CardTitle>
+        <CardDescription>
+          Your highest-impact areas map to these Eco Centre focus pillars and programmes.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Pillar mapping */}
+        <div className="grid gap-3 md:grid-cols-3">
+          {pillarMatches.map(({ pillar, programmes: progs }) => (
+            <div key={pillar} className="rounded-lg bg-card border border-border p-4">
+              <div className="flex items-center justify-between mb-1">
+                <h4 className="font-semibold text-foreground">{pillar}</h4>
+                <Badge variant="secondary">{progs.length}</Badge>
+              </div>
+              <p className="text-xs text-muted-foreground mb-3">
+                {PILLAR_DESCRIPTIONS[pillar]}
+              </p>
+              <div className="space-y-1">
+                {progs.length === 0 && (
+                  <p className="text-xs text-muted-foreground italic">No direct match</p>
+                )}
+                {progs.map((p) => (
+                  <Link
+                    key={p.slug}
+                    to={`/programmes/${p.slug}`}
+                    className="block text-xs text-primary hover:underline"
+                  >
+                    · {p.title}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Recommended programmes list */}
+        <div className="space-y-2">
+          <h4 className="text-sm font-semibold text-foreground">Recommended programmes</h4>
+          <div className="grid gap-2">
+            {recommended.map(({ programme }) => {
+              const Icon = programme.icon;
+              return (
+                <Link
+                  key={programme.slug}
+                  to={`/programmes/${programme.slug}`}
+                  className="flex items-center gap-3 p-3 rounded-lg border border-border bg-card hover:border-primary hover:bg-primary/5 transition-colors group"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-foreground text-sm">{programme.title}</p>
+                    <p className="text-xs text-muted-foreground truncate">{programme.tagline}</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
