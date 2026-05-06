@@ -4,6 +4,7 @@ import Features from "@/components/Features";
 import UseCases from "@/components/UseCases";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import ProgrammeQuiz from "@/components/ProgrammeQuiz";
 
 const Index = () => {
   return (
@@ -11,6 +12,7 @@ const Index = () => {
       <Hero />
       <HowItWorks />
       <Features />
+      <ProgrammeQuiz />
       <UseCases />
       <CTA />
       <Footer />
