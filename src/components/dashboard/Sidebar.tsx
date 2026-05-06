@@ -49,8 +49,8 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <div className="p-4 flex items-center gap-2">
-          <img src={logo} alt="CarbonTrack logo" className="w-8 h-8" />
-          <h1 className="text-xl font-bold text-primary">CarbonTrack</h1>
+          <img src={logo} alt="Eco Centre logo" className="w-8 h-8" />
+          <h1 className="text-xl font-bold text-primary">Eco Centre</h1>
         </div>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>

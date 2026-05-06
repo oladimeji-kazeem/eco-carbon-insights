@@ -1,23 +1,22 @@
-import { Upload, Cpu, BarChart3, ArrowRight } from "lucide-react";
-
+import { Megaphone, Sparkles, HandHeart, ArrowRight } from "lucide-react";
 
 const steps = [
   {
-    icon: Upload,
-    title: "Upload Your Data",
-    description: "Simply upload invoices, bank statements, or transaction data. We support CSV, PDF, and direct integrations.",
+    icon: Megaphone,
+    title: "Inform",
+    description: "We share knowledge, tools and resources to help people understand their environmental impact and the practical actions that make a difference.",
     step: "01",
   },
   {
-    icon: Cpu,
-    title: "AI Analysis",
-    description: "Our engine automatically categorizes expenses and calculates carbon emissions using verified emission factors.",
+    icon: Sparkles,
+    title: "Inspire",
+    description: "Through community outreach, education and storytelling, we inspire people and organisations to take meaningful climate action.",
     step: "02",
   },
   {
-    icon: BarChart3,
-    title: "Get Insights",
-    description: "Receive a detailed carbon report with your highest impact areas and actionable reduction recommendations.",
+    icon: HandHeart,
+    title: "Enable",
+    description: "We support local sustainability infrastructure, cross-sector collaboration and centres of excellence so action becomes easy and lasting.",
     step: "03",
   },
 ];
@@ -28,21 +27,20 @@ const HowItWorks = () => {
       <div className="container mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            How It <span className="gradient-text">Works</span>
+            How We <span className="gradient-text">Make Impact</span>
           </h2>
           <p className="text-lg text-muted-foreground">
-            From raw business data to actionable carbon insights in three simple steps.
+            Our mission is built on three principles that guide every programme and partnership.
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {steps.map((step, index) => (
             <div key={step.title} className="relative group">
-              {/* Connector line */}
               {index < steps.length - 1 && (
                 <div className="hidden md:block absolute top-16 left-[60%] w-full h-0.5 bg-gradient-to-r from-primary/30 to-transparent" />
               )}
-              
+
               <div className="card-gradient rounded-2xl p-8 shadow-soft border border-border transition-all duration-300 hover:shadow-glow hover:-translate-y-1">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-14 h-14 gradient-bg rounded-xl flex items-center justify-center shadow-glow">
@@ -60,8 +58,8 @@ const HowItWorks = () => {
         </div>
 
         <div className="text-center mt-12">
-          <a href="/app/upload" className="inline-flex items-center gap-2 text-primary font-medium hover:gap-4 transition-all cursor-pointer">
-            <span>See detailed walkthrough</span>
+          <a href="#programmes" className="inline-flex items-center gap-2 text-primary font-medium hover:gap-4 transition-all cursor-pointer">
+            <span>Explore our programmes</span>
             <ArrowRight className="w-4 h-4" />
           </a>
         </div>
