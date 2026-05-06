@@ -11,7 +11,7 @@ const Footer = () => {
           </div>
           
           <p className="text-sm text-muted-foreground text-center">
-            Making carbon reporting accessible for every small business.
+            Inform · Inspire · Enable — taking action on climate change together.
           </p>
           
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
