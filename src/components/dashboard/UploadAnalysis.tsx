@@ -149,6 +149,9 @@ export default function UploadAnalysis() {
         </CardContent>
       </Card>
 
+      {/* Saved quiz recommendation */}
+      <SavedQuizRecommendation />
+
       {/* Results */}
       {results.map((result) => (
         <div key={result.id} className="space-y-4 animate-fade-up">
