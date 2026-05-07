@@ -1,26 +1,31 @@
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, CheckCircle2, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, ExternalLink, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { getProgrammeBySlug, programmes } from "@/data/programmes";
 import Footer from "@/components/Footer";
 import logo from "@/assets/logo.png";
 import { useSEO } from "@/lib/seo";
+import { useProgramme, useProgrammes, getIcon } from "@/hooks/useProgrammesData";
 
 const ProgrammeDetail = () => {
   const { slug } = useParams();
-  const programme = slug ? getProgrammeBySlug(slug) : undefined;
+  const { data: programme, isLoading } = useProgramme(slug);
+  const { data: allProgrammes } = useProgrammes();
 
   useSEO({
-    title: programme
-      ? `${programme.title} | Eco Centre`
-      : "Programme not found | Eco Centre",
-    description: programme
-      ? `${programme.tagline}. ${programme.mission}`
-      : "This Eco Centre programme could not be found.",
+    title: programme ? `${programme.title} | Eco Centre` : "Programme | Eco Centre",
+    description: programme ? `${programme.tagline}. ${programme.mission}` : undefined,
     ogImage: "/og-image.png",
   });
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-6 h-6 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (!programme) {
     return (
@@ -33,8 +38,8 @@ const ProgrammeDetail = () => {
     );
   }
 
-  const Icon = programme.icon;
-  const others = programmes.filter((p) => p.slug !== programme.slug).slice(0, 3);
+  const Icon = getIcon(programme.icon);
+  const others = (allProgrammes ?? []).filter((p) => p.slug !== programme.slug).slice(0, 3);
 
   return (
     <div className="min-h-screen bg-background">
@@ -71,82 +76,92 @@ const ProgrammeDetail = () => {
 
       <section className="py-16">
         <div className="container mx-auto px-6 max-w-4xl space-y-12">
-          <div>
-            <h2 className="text-2xl font-bold text-foreground mb-3">Our mission</h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">{programme.mission}</p>
-          </div>
-
-          <div>
-            <h2 className="text-2xl font-bold text-foreground mb-3">About the programme</h2>
-            <p className="text-muted-foreground leading-relaxed">{programme.description}</p>
-          </div>
-
-          <div>
-            <h2 className="text-2xl font-bold text-foreground mb-6">Highlights</h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              {programme.highlights.map((h) => (
-                <Card key={h} className="border-border/50">
-                  <CardContent className="p-5 flex gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <p className="text-foreground">{h}</p>
-                  </CardContent>
-                </Card>
-              ))}
+          {programme.mission && (
+            <div>
+              <h2 className="text-2xl font-bold text-foreground mb-3">Our mission</h2>
+              <p className="text-lg text-muted-foreground leading-relaxed">{programme.mission}</p>
             </div>
-          </div>
+          )}
 
-          <div className="relative gradient-bg rounded-3xl p-10 md:p-12 text-center overflow-hidden">
-            <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-2xl" />
-            <div className="relative">
-              <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-3">
-                Ready to take action?
-              </h2>
-              <p className="text-primary-foreground/80 mb-6 max-w-xl mx-auto">
-                Join us in making {programme.title.toLowerCase()} a reality. Your support helps us inform, inspire and enable real change.
-              </p>
-              <a href={programme.cta.href} target="_blank" rel="noopener noreferrer">
-                <Button size="xl" className="bg-white text-primary hover:bg-white/90">
-                  {programme.cta.label}
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-              </a>
+          {programme.description && (
+            <div>
+              <h2 className="text-2xl font-bold text-foreground mb-3">About the programme</h2>
+              <p className="text-muted-foreground leading-relaxed">{programme.description}</p>
             </div>
-          </div>
+          )}
 
-          <a
-            href={programme.externalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all"
-          >
-            Read more on ecocentresw.org <ExternalLink className="w-4 h-4" />
-          </a>
+          {programme.highlights.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-bold text-foreground mb-6">Highlights</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                {programme.highlights.map((h) => (
+                  <Card key={h} className="border-border/50">
+                    <CardContent className="p-5 flex gap-3">
+                      <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                      <p className="text-foreground">{h}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {programme.cta_label && programme.cta_href && (
+            <div className="relative gradient-bg rounded-3xl p-10 md:p-12 text-center overflow-hidden">
+              <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-2xl" />
+              <div className="relative">
+                <h2 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-3">Ready to take action?</h2>
+                <p className="text-primary-foreground/80 mb-6 max-w-xl mx-auto">
+                  Join us in making {programme.title.toLowerCase()} a reality.
+                </p>
+                <a href={programme.cta_href} target="_blank" rel="noopener noreferrer">
+                  <Button size="xl" className="bg-white text-primary hover:bg-white/90">
+                    {programme.cta_label}
+                    <ArrowRight className="w-5 h-5" />
+                  </Button>
+                </a>
+              </div>
+            </div>
+          )}
+
+          {programme.external_url && (
+            <a
+              href={programme.external_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all"
+            >
+              Read more on ecocentresw.org <ExternalLink className="w-4 h-4" />
+            </a>
+          )}
         </div>
       </section>
 
-      <section className="py-16 bg-secondary/30">
-        <div className="container mx-auto px-6 max-w-5xl">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Explore other programmes</h2>
-          <div className="grid md:grid-cols-3 gap-4">
-            {others.map((p) => {
-              const PIcon = p.icon;
-              return (
-                <Link
-                  key={p.slug}
-                  to={`/programmes/${p.slug}`}
-                  className="group bg-card rounded-xl p-5 border border-border hover:shadow-glow transition-all"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                    <PIcon className="w-5 h-5 text-primary" />
-                  </div>
-                  <h3 className="font-bold text-foreground mb-1">{p.title}</h3>
-                  <p className="text-sm text-muted-foreground">{p.tagline}</p>
-                </Link>
-              );
-            })}
+      {others.length > 0 && (
+        <section className="py-16 bg-secondary/30">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Explore other programmes</h2>
+            <div className="grid md:grid-cols-3 gap-4">
+              {others.map((p) => {
+                const PIcon = getIcon(p.icon);
+                return (
+                  <Link
+                    key={p.slug}
+                    to={`/programmes/${p.slug}`}
+                    className="group bg-card rounded-xl p-5 border border-border hover:shadow-glow transition-all"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                      <PIcon className="w-5 h-5 text-primary" />
+                    </div>
+                    <h3 className="font-bold text-foreground mb-1">{p.title}</h3>
+                    <p className="text-sm text-muted-foreground">{p.tagline}</p>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <Footer />
     </div>
