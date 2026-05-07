@@ -246,6 +246,44 @@ export default function UploadAnalysis() {
   );
 }
 
+function SavedQuizRecommendation() {
+  const saved = loadQuizState();
+  if (!saved) return null;
+  const programme = getProgrammeBySlug(saved.recommendedSlug);
+  if (!programme) return null;
+  const Icon = programme.icon;
+  const completed = new Date(saved.completedAt).toLocaleDateString();
+
+  return (
+    <Card className="border-primary/30 bg-primary/5">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-primary">
+          <Compass className="h-5 w-5" />
+          Your saved programme match
+        </CardTitle>
+        <CardDescription>
+          From your quiz on {completed}. Re-take the quiz any time on the homepage.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Link
+          to={`/programmes/${programme.slug}`}
+          className="flex items-center gap-3 p-3 rounded-lg border border-border bg-card hover:border-primary transition-colors group"
+        >
+          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <Icon className="w-5 h-5 text-primary" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-medium text-foreground text-sm">{programme.title}</p>
+            <p className="text-xs text-muted-foreground truncate">{programme.tagline}</p>
+          </div>
+          <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+        </Link>
+      </CardContent>
+    </Card>
+  );
+}
+
 interface MappingProps {
   result: AnalysisResult;
 }
