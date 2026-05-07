@@ -43,28 +43,27 @@ const Hero = () => {
         <div className="max-w-4xl mx-auto text-center pt-20">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-8 animate-fade-up">
             <Leaf className="w-4 h-4" />
-            Inform · Inspire · Enable
+            {eyebrow}
           </div>
 
           <h1 className="text-5xl md:text-7xl font-extrabold text-foreground leading-tight mb-6 animate-fade-up" style={{ animationDelay: '0.1s' }}>
-            Empowering people to live and work{' '}
-            <span className="gradient-text">more sustainably</span>
+            {title}
           </h1>
 
           <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-            We help people, communities and organisations take practical action on climate change and protect the environment.
+            {subtitle}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up" style={{ animationDelay: '0.3s' }}>
-            <a href="https://www.crowdfunder.co.uk/p/eco-save" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
+            <a href={primary.href ?? "#"} target={primary.href?.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer" className="w-full sm:w-auto">
               <Button variant="hero" size="xl" className="w-full">
-                Support Our Work
+                {primary.label}
                 <ArrowRight className="w-5 h-5" />
               </Button>
             </a>
-            <a href="#programmes" className="w-full sm:w-auto">
+            <a href={secondary.href ?? "#"} className="w-full sm:w-auto">
               <Button variant="heroOutline" size="xl" className="w-full">
-                Explore Programmes
+                {secondary.label}
               </Button>
             </a>
           </div>
