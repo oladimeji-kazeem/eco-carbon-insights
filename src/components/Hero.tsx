@@ -2,8 +2,19 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Leaf, Users, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
+import { useSiteContent, contentMap } from "@/hooks/useSiteContent";
+
+interface CTAValue { label?: string; href?: string }
 
 const Hero = () => {
+  const { data } = useSiteContent("hero");
+  const c = contentMap(data);
+  const eyebrow = (c.eyebrow as string) ?? "Inform · Inspire · Enable";
+  const title = (c.title as string) ?? "Empowering people to live and work more sustainably";
+  const subtitle = (c.subtitle as string) ?? "We help people, communities and organisations take practical action on climate change.";
+  const primary = (c.primary_cta as CTAValue) ?? { label: "Support Our Work", href: "#cta" };
+  const secondary = (c.secondary_cta as CTAValue) ?? { label: "Explore Programmes", href: "#programmes" };
+
   return (
     <section className="relative min-h-screen hero-gradient overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
