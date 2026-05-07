@@ -48,7 +48,7 @@ export default function ContentEditor() {
       const rows = BLOCKS.map((b) => ({
         section: b.section,
         key: b.key,
-        value: values[b.key] ?? (b.type === "cta" ? { label: "", href: "" } : ""),
+        value: (values[b.key] ?? (b.type === "cta" ? { label: "", href: "" } : "")) as never,
       }));
       const { error } = await supabase.from("site_content").upsert(rows, { onConflict: "section,key" });
       if (error) throw error;
