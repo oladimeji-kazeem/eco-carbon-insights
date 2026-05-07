@@ -4,6 +4,9 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, Mail, CheckCircle2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { useSiteContent, contentMap } from "@/hooks/useSiteContent";
+
+interface CTAValue { label?: string; href?: string }
 
 const emailSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
