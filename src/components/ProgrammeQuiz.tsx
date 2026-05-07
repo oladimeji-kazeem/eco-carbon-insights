@@ -90,26 +90,48 @@ const questions: QuizQuestion[] = [
 const ProgrammeQuiz = () => {
   const [step, setStep] = useState(0);
   const [scores, setScores] = useState<Record<string, number>>({});
+  const [answers, setAnswers] = useState<{ questionId: string; optionLabel: string }[]>([]);
   const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    const saved = loadQuizState();
+    if (saved) {
+      setScores(saved.scores);
+      setAnswers(saved.answers);
+      setDone(true);
+    }
+  }, []);
 
   const handleAnswer = (option: QuizOption) => {
     const updated = { ...scores };
     for (const [slug, w] of Object.entries(option.weights)) {
       updated[slug] = (updated[slug] ?? 0) + (w ?? 0);
     }
+    const nextAnswers = [...answers, { questionId: questions[step].id, optionLabel: option.label }];
     setScores(updated);
+    setAnswers(nextAnswers);
 
     if (step + 1 < questions.length) {
       setStep(step + 1);
     } else {
       setDone(true);
+      const sorted = Object.entries(updated).sort((a, b) => b[1] - a[1]);
+      const topSlug = sorted[0]?.[0] ?? programmes[0].slug;
+      saveQuizState({
+        scores: updated,
+        recommendedSlug: topSlug,
+        answers: nextAnswers,
+        completedAt: new Date().toISOString(),
+      });
     }
   };
 
   const reset = () => {
     setScores({});
+    setAnswers([]);
     setStep(0);
     setDone(false);
+    clearQuizState();
   };
 
   const recommendation: Programme | undefined = (() => {
