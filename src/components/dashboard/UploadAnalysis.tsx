@@ -10,7 +10,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
-import { programmesForCategory, type Programme, type Pillar } from "@/data/programmes";
+import { programmesForCategory, getProgrammeBySlug, type Programme, type Pillar } from "@/data/programmes";
+import { loadQuizState } from "@/lib/quizStorage";
 
 const PILLAR_DESCRIPTIONS: Record<Pillar, string> = {
   Inform: "Knowledge, tools and data so you understand your impact.",
