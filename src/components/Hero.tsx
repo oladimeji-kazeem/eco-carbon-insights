@@ -32,6 +32,9 @@ const Hero = () => {
             <a href="#programmes" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Programmes
             </a>
+            <Link to="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              Admin
+            </Link>
             <a href="#signup">
               <Button variant="heroOutline" size="lg">
                 Get Involved
