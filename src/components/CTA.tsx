@@ -4,6 +4,9 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, Mail, CheckCircle2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { useSiteContent, contentMap } from "@/hooks/useSiteContent";
+
+interface CTAValue { label?: string; href?: string }
 
 const emailSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -15,6 +18,10 @@ const CTA = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const { data } = useSiteContent("cta");
+  const c = contentMap(data);
+  const title = (c.title as string) ?? "Help us help our planet";
+  const subtitle = (c.subtitle as string) ?? "Join our community of supporters, volunteers and partners.";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,10 +54,10 @@ const CTA = () => {
 
             <div className="relative">
               <h2 className="text-3xl md:text-5xl font-bold text-primary-foreground mb-4">
-                Help us help our planet
+                {title}
               </h2>
               <p className="text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-8">
-                Join our community of supporters, volunteers and partners. Sign up to hear about our programmes, events and ways to get involved.
+                {subtitle}
               </p>
 
               {isSubmitted ? (
