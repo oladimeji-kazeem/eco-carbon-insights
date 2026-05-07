@@ -6,10 +6,21 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getProgrammeBySlug, programmes } from "@/data/programmes";
 import Footer from "@/components/Footer";
 import logo from "@/assets/logo.png";
+import { useSEO } from "@/lib/seo";
 
 const ProgrammeDetail = () => {
   const { slug } = useParams();
   const programme = slug ? getProgrammeBySlug(slug) : undefined;
+
+  useSEO({
+    title: programme
+      ? `${programme.title} | Eco Centre`
+      : "Programme not found | Eco Centre",
+    description: programme
+      ? `${programme.tagline}. ${programme.mission}`
+      : "This Eco Centre programme could not be found.",
+    ogImage: "/og-image.png",
+  });
 
   if (!programme) {
     return (

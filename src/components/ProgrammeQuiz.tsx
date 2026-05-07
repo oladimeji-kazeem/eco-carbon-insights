@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, RotateCcw, Sparkles } from "lucide-react";
 import { programmes, type Programme } from "@/data/programmes";
+import { loadQuizState, saveQuizState, clearQuizState } from "@/lib/quizStorage";
 
 interface QuizOption {
   label: string;
