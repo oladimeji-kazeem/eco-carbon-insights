@@ -24,7 +24,7 @@ export interface ContentVersion {
   item_id: string;
   version_number: number;
   status: ContentStatus;
-  value: Record<string, unknown>;
+  value: any;
   author_id: string | null;
   note: string | null;
   scheduled_for: string | null;
@@ -193,7 +193,7 @@ export const useNotifications = () => {
 
 // ----- Mutations -----
 
-const audit = async (item_id: string | null, version_id: string | null, action: string, meta: Record<string, unknown> = {}) => {
+const audit = async (item_id: string | null, version_id: string | null, action: string, meta: any = {}) => {
   const { data: u } = await supabase.auth.getUser();
   if (!u.user) return;
   await supabase.from("content_audit_log").insert({ item_id, version_id, actor_id: u.user.id, action, meta });
@@ -213,7 +213,7 @@ export const useCMSActions = () => {
   };
 
   const createDraft = useMutation({
-    mutationFn: async (input: { item_id: string; value: Record<string, unknown>; note?: string }) => {
+    mutationFn: async (input: { item_id: string; value: any; note?: string }) => {
       if (!user) throw new Error("Not signed in");
       const { data: latest } = await supabase
         .from("content_versions").select("version_number").eq("item_id", input.item_id)
@@ -231,7 +231,7 @@ export const useCMSActions = () => {
   });
 
   const updateDraft = useMutation({
-    mutationFn: async (input: { version_id: string; value: Record<string, unknown>; note?: string }) => {
+    mutationFn: async (input: { version_id: string; value: any; note?: string }) => {
       const { error } = await supabase.from("content_versions").update({
         value: input.value, note: input.note, status: "draft",
       }).eq("id", input.version_id);
