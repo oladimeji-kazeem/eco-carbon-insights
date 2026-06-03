@@ -14,6 +14,220 @@ export type Database = {
   }
   public: {
     Tables: {
+      content_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          id: string
+          item_id: string | null
+          meta: Json
+          version_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          item_id?: string | null
+          meta?: Json
+          version_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          item_id?: string | null
+          meta?: Json
+          version_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_audit_log_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "content_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_audit_log_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "content_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      content_items: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          current_version_id: string | null
+          id: string
+          published_version_id: string | null
+          slug: string
+          title: string
+          type: Database["public"]["Enums"]["content_type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          current_version_id?: string | null
+          id?: string
+          published_version_id?: string | null
+          slug: string
+          title?: string
+          type: Database["public"]["Enums"]["content_type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          current_version_id?: string | null
+          id?: string
+          published_version_id?: string | null
+          slug?: string
+          title?: string
+          type?: Database["public"]["Enums"]["content_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_items_current_version_fk"
+            columns: ["current_version_id"]
+            isOneToOne: false
+            referencedRelation: "content_versions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "content_items_published_version_fk"
+            columns: ["published_version_id"]
+            isOneToOne: false
+            referencedRelation: "content_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      content_reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          decision: string
+          id: string
+          reviewer_id: string | null
+          version_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          decision: string
+          id?: string
+          reviewer_id?: string | null
+          version_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          decision?: string
+          id?: string
+          reviewer_id?: string | null
+          version_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_reviews_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "content_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      content_versions: {
+        Row: {
+          author_id: string | null
+          created_at: string
+          id: string
+          item_id: string
+          note: string | null
+          published_at: string | null
+          scheduled_for: string | null
+          status: Database["public"]["Enums"]["content_status"]
+          updated_at: string
+          value: Json
+          version_number: number
+        }
+        Insert: {
+          author_id?: string | null
+          created_at?: string
+          id?: string
+          item_id: string
+          note?: string | null
+          published_at?: string | null
+          scheduled_for?: string | null
+          status?: Database["public"]["Enums"]["content_status"]
+          updated_at?: string
+          value?: Json
+          version_number?: number
+        }
+        Update: {
+          author_id?: string | null
+          created_at?: string
+          id?: string
+          item_id?: string
+          note?: string | null
+          published_at?: string | null
+          scheduled_for?: string | null
+          status?: Database["public"]["Enums"]["content_status"]
+          updated_at?: string
+          value?: Json
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_versions_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "content_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          kind: string
+          link: string | null
+          read: boolean
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind: string
+          link?: string | null
+          read?: boolean
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          kind?: string
+          link?: string | null
+          read?: boolean
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -194,9 +408,22 @@ export type Database = {
         }
         Returns: boolean
       }
+      publish_content_version: {
+        Args: { _version_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "editor" | "viewer" | "reviewer" | "contributor"
+      content_status:
+        | "draft"
+        | "in_review"
+        | "changes_requested"
+        | "approved"
+        | "scheduled"
+        | "published"
+        | "archived"
+      content_type: "site_content" | "programme" | "page"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -325,6 +552,16 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "editor", "viewer", "reviewer", "contributor"],
+      content_status: [
+        "draft",
+        "in_review",
+        "changes_requested",
+        "approved",
+        "scheduled",
+        "published",
+        "archived",
+      ],
+      content_type: ["site_content", "programme", "page"],
     },
   },
 } as const
