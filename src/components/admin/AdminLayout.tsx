@@ -66,7 +66,7 @@ export default function AdminLayout() {
 
         <nav className="flex-1 p-3 space-y-4 overflow-y-auto">
           {navGroups.map((g) => {
-            const items = g.items.filter(canSee);
+            const items = g.items.filter((it) => canSee(it as unknown as Record<string, unknown>));
             if (items.length === 0) return null;
             return (
               <div key={g.label}>
