@@ -44,7 +44,7 @@ export default function AdminLayout() {
 
   const handleSignOut = async () => { await signOut(); navigate("/"); };
 
-  const canSee = (item: { adminOnly?: boolean; editor?: boolean; reviewer?: boolean }) => {
+  const canSee = (item: Record<string, unknown>) => {
     if (item.adminOnly) return role === "admin";
     if (item.editor) return hasRole("admin", "editor");
     if (item.reviewer) return hasRole("admin", "editor", "reviewer");
