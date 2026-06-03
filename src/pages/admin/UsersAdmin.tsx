@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
-type Role = "admin" | "editor" | "viewer";
+type Role = "admin" | "editor" | "reviewer" | "contributor" | "viewer";
 
 interface UserRow {
   id: string;
@@ -69,10 +69,12 @@ export default function UsersAdmin() {
                   <div className="text-xs text-muted-foreground truncate">{u.email}</div>
                 </div>
                 <Select value={currentRole} onValueChange={(v) => setRole(u.id, v as Role)}>
-                  <SelectTrigger className="w-32"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="w-36"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="admin">Admin</SelectItem>
                     <SelectItem value="editor">Editor</SelectItem>
+                    <SelectItem value="reviewer">Reviewer</SelectItem>
+                    <SelectItem value="contributor">Contributor</SelectItem>
                     <SelectItem value="viewer">Viewer</SelectItem>
                   </SelectContent>
                 </Select>

@@ -1,34 +1,33 @@
 import { Link } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Boxes, Settings as SettingsIcon, Users } from "lucide-react";
-import { useProgrammes } from "@/hooks/useProgrammesData";
-import { useSiteContent } from "@/hooks/useSiteContent";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Layers, Inbox, Calendar, History, ClipboardList, Users, Settings as SettingsIcon } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useReviewQueue, useScheduled, useContentItems } from "@/hooks/useCMS";
 
 export default function AdminDashboard() {
-  const { role } = useAuth();
-  const { data: programmes } = useProgrammes(true);
-  const { data: content } = useSiteContent();
+  const { role, canReview } = useAuth();
+  const { data: items } = useContentItems();
+  const { data: queue } = useReviewQueue();
+  const { data: scheduled } = useScheduled();
 
   const cards = [
-    { to: "/admin/content", label: "Homepage Content", icon: FileText, count: content?.length ?? 0, suffix: "blocks" },
-    { to: "/admin/programmes", label: "Programmes", icon: Boxes, count: programmes?.length ?? 0, suffix: "total" },
-    ...(role === "admin"
-      ? [
-          { to: "/admin/settings", label: "Site Settings", icon: SettingsIcon, count: 1, suffix: "config" },
-          { to: "/admin/users", label: "Users & Roles", icon: Users, count: null, suffix: "" },
-        ]
-      : []),
-  ];
+    { to: "/admin/my-work", label: "My work", icon: ClipboardList, hint: "Your drafts" },
+    canReview && { to: "/admin/review", label: "Review queue", icon: Inbox, count: queue?.length ?? 0, hint: "Awaiting review" },
+    canReview && { to: "/admin/scheduled", label: "Scheduled", icon: Calendar, count: scheduled?.length ?? 0, hint: "Upcoming publishes" },
+    { to: "/admin/content-items", label: "All content", icon: Layers, count: items?.length ?? 0, hint: "Managed items" },
+    canReview && { to: "/admin/activity", label: "Activity", icon: History, hint: "Editorial log" },
+    role === "admin" && { to: "/admin/users", label: "Users & roles", icon: Users, hint: "Team" },
+    role === "admin" && { to: "/admin/settings", label: "Site settings", icon: SettingsIcon, hint: "Branding & SEO" },
+  ].filter(Boolean) as Array<{ to: string; label: string; icon: typeof Layers; count?: number; hint: string }>;
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-foreground">Welcome back</h1>
-        <p className="text-muted-foreground">Manage every part of your Eco Centre site from here.</p>
+        <p className="text-muted-foreground">Plan, review, schedule, and publish content across Eco Centre.</p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-3 gap-4">
         {cards.map((c) => (
           <Link key={c.to} to={c.to}>
             <Card className="hover:border-primary transition-colors cursor-pointer h-full">
@@ -37,11 +36,10 @@ export default function AdminDashboard() {
                 <c.icon className="w-4 h-4 text-primary" />
               </CardHeader>
               <CardContent>
-                {c.count !== null && (
-                  <div className="text-2xl font-bold text-foreground">
-                    {c.count} <span className="text-sm font-normal text-muted-foreground">{c.suffix}</span>
-                  </div>
+                {typeof c.count === "number" && (
+                  <div className="text-2xl font-bold text-foreground">{c.count}</div>
                 )}
+                <CardDescription className="text-xs">{c.hint}</CardDescription>
               </CardContent>
             </Card>
           </Link>

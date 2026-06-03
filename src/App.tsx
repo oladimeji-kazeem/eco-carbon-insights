@@ -23,6 +23,12 @@ import ContentEditor from "./pages/admin/ContentEditor";
 import ProgrammesEditor from "./pages/admin/ProgrammesEditor";
 import SiteSettingsEditor from "./pages/admin/SiteSettingsEditor";
 import UsersAdmin from "./pages/admin/UsersAdmin";
+import ReviewQueue from "./pages/admin/ReviewQueue";
+import ContentWorkspace from "./pages/admin/ContentWorkspace";
+import ContentItemsList from "./pages/admin/ContentItemsList";
+import ActivityLog from "./pages/admin/ActivityLog";
+import Scheduled from "./pages/admin/Scheduled";
+import MyWork from "./pages/admin/MyWork";
 
 const queryClient = new QueryClient();
 
@@ -42,11 +48,17 @@ const App = () => (
             <Route
               path="/admin"
               element={
-                <RequireAuth requireEditor>
+                <RequireAuth requireAnyRole={["admin", "editor", "reviewer", "contributor", "viewer"]}>
                   <AdminLayout />
                 </RequireAuth>
               }
             >
+              <Route path="my-work" element={<MyWork />} />
+              <Route path="content-items" element={<ContentItemsList />} />
+              <Route path="workspace/:id" element={<ContentWorkspace />} />
+              <Route path="review" element={<RequireAuth requireReviewer><ReviewQueue /></RequireAuth>} />
+              <Route path="scheduled" element={<RequireAuth requireReviewer><Scheduled /></RequireAuth>} />
+              <Route path="activity" element={<RequireAuth requireReviewer><ActivityLog /></RequireAuth>} />
               <Route index element={<AdminDashboard />} />
               <Route path="content" element={<ContentEditor />} />
               <Route path="programmes" element={<ProgrammesEditor />} />
