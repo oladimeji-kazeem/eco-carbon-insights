@@ -1,73 +1,63 @@
-import { 
-  FileSpreadsheet, 
-  Zap, 
-  Shield, 
-  TrendingDown,
-  Building2,
-  Globe
-} from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowUpRight, Leaf, Loader2 } from "lucide-react";
+import { useProgrammes, getIcon } from "@/hooks/useProgrammesData";
+import { useSiteContent, contentMap } from "@/hooks/useSiteContent";
 
-const features = [
-  {
-    icon: FileSpreadsheet,
-    title: "Multiple Data Formats",
-    description: "Upload CSVs, PDFs, or connect accounting software directly. We handle the heavy lifting.",
-  },
-  {
-    icon: Zap,
-    title: "Instant Processing",
-    description: "Get your carbon report in under 10 minutes, not weeks. Powered by advanced AI categorization.",
-  },
-  {
-    icon: Shield,
-    title: "Verified Methodology",
-    description: "Based on GHG Protocol standards with region-specific emission factors for accuracy.",
-  },
-  {
-    icon: TrendingDown,
-    title: "Reduction Roadmap",
-    description: "Not just numbers—get prioritized, actionable recommendations to cut your carbon footprint.",
-  },
-  {
-    icon: Building2,
-    title: "Built for SMBs",
-    description: "Designed specifically for small businesses. No complex setups or enterprise pricing.",
-  },
-  {
-    icon: Globe,
-    title: "Scope 1, 2 & 3",
-    description: "Cover direct emissions, energy, and supply chain impacts for a complete picture.",
-  },
+const accents = [
+  "from-primary/20 to-primary/5",
+  "from-accent/20 to-accent/5",
 ];
 
 const Features = () => {
+  const { data: programmes, isLoading } = useProgrammes();
+  const { data: content } = useSiteContent("features");
+  const c = contentMap(content);
+  const heading = (c.heading as string) ?? "Our Programmes";
+  const subtitle = (c.subtitle as string) ?? "Find out more about what we are working on.";
+
   return (
-    <section className="py-24 hero-gradient">
+    <section id="programmes" className="py-24 hero-gradient">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Everything You Need for{' '}
-            <span className="gradient-text">Carbon Reporting</span>
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Purpose-built features for small businesses to measure, understand, and reduce their environmental impact.
-          </p>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+            <Leaf className="w-4 h-4" />
+            What We Do
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">{heading}</h2>
+          <p className="text-lg text-muted-foreground">{subtitle}</p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {features.map((feature) => (
-            <div 
-              key={feature.title} 
-              className="group bg-card rounded-2xl p-6 shadow-soft border border-border transition-all duration-300 hover:shadow-glow hover:-translate-y-1"
-            >
-              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <feature.icon className="w-6 h-6 text-primary" />
-              </div>
-              <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
-            </div>
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {programmes?.map((p, i) => {
+              const Icon = getIcon(p.icon);
+              return (
+                <Link
+                  key={p.slug}
+                  to={`/programmes/${p.slug}`}
+                  className="group bg-card rounded-2xl overflow-hidden shadow-soft border border-border transition-all duration-300 hover:shadow-glow hover:-translate-y-1 flex flex-col"
+                >
+                  <div className={`relative h-32 bg-gradient-to-br ${accents[i % accents.length]} flex items-center justify-center overflow-hidden`}>
+                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_30%,hsl(var(--primary))_0%,transparent_60%)]" />
+                    <div className="relative w-16 h-16 rounded-2xl gradient-bg flex items-center justify-center shadow-glow">
+                      <Icon className="w-8 h-8 text-primary-foreground" />
+                    </div>
+                  </div>
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="text-lg font-bold text-foreground">{p.title}</h3>
+                      <ArrowUpRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" />
+                    </div>
+                    <p className="text-muted-foreground text-sm leading-relaxed flex-1">{p.description || p.tagline}</p>
+                    <span className="mt-4 text-sm font-medium text-primary group-hover:underline">Learn more</span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 
-import { Home, Settings, BarChart3, LogOut, Activity } from "lucide-react";
+import { Home, Settings, BarChart3, LogOut, Activity, Upload } from "lucide-react";
+import logo from "@/assets/logo.png";
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +19,11 @@ const items = [
     title: "Dashboard",
     url: "/app",
     icon: Home,
+  },
+  {
+    title: "Upload & Analyze",
+    url: "/app/upload",
+    icon: Upload,
   },
   {
     title: "Analytics",
@@ -42,8 +48,9 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
-        <div className="p-4">
-          <h1 className="text-xl font-bold text-primary">SaaS App</h1>
+        <div className="p-4 flex items-center gap-2">
+          <img src={logo} alt="Eco Centre logo" className="w-8 h-8" />
+          <h1 className="text-xl font-bold text-primary">Eco Centre</h1>
         </div>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>

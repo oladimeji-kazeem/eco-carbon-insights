@@ -1,4 +1,4 @@
-import { Leaf } from "lucide-react";
+import logo from "@/assets/logo.png";
 
 const Footer = () => {
   return (
@@ -6,14 +6,12 @@ const Footer = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
-              <Leaf className="w-4 h-4 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-foreground">CarbonTrack</span>
+            <img src={logo} alt="Eco Centre logo" className="w-8 h-8" />
+            <span className="font-bold text-foreground">Eco Centre</span>
           </div>
           
           <p className="text-sm text-muted-foreground text-center">
-            Making carbon reporting accessible for every small business.
+            Inform · Inspire · Enable — taking action on climate change together.
           </p>
           
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
