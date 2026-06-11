@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Layers, Inbox, Calendar, History, ClipboardList, Users, Settings as SettingsIcon, Server } from "lucide-react";
+import { Layers, Inbox, Calendar, History, ClipboardList, Users, Settings as SettingsIcon, Server, Activity } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useReviewQueue, useScheduled, useContentItems } from "@/hooks/useCMS";
 
@@ -16,6 +16,7 @@ export default function AdminDashboard() {
     canReview && { to: "/admin/scheduled", label: "Scheduled", icon: Calendar, count: scheduled?.length ?? 0, hint: "Upcoming publishes" },
     { to: "/admin/content-items", label: "All content", icon: Layers, count: items?.length ?? 0, hint: "Managed items" },
     canReview && { to: "/admin/activity", label: "Activity", icon: History, hint: "Editorial log" },
+    role === "admin" && { to: "/admin/web-analytics", label: "Web Analytics", icon: Activity, hint: "Traffic & Engagement" },
     role === "admin" && { to: "/admin/users", label: "Users & roles", icon: Users, hint: "Team" },
     role === "admin" && { to: "/admin/settings", label: "Site settings", icon: SettingsIcon, hint: "Branding & SEO" },
     role === "admin" && { to: "/admin/system", label: "System Console", icon: Server, hint: "Health & Logs" },

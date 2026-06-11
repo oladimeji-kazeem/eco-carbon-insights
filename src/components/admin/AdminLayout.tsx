@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { LayoutDashboard, FileText, Boxes, Settings as SettingsIcon, Users, LogOut, ArrowLeft, Inbox, Layers, Calendar, History, ClipboardList, Server } from "lucide-react";
+import { LayoutDashboard, FileText, Boxes, Settings as SettingsIcon, Users, LogOut, ArrowLeft, Inbox, Layers, Calendar, History, ClipboardList, Server, Activity } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +9,10 @@ import logo from "@/assets/logo.png";
 const navGroups = [
   {
     label: "Overview",
-    items: [{ to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true }],
+    items: [
+      { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
+      { to: "/admin/web-analytics", label: "Web Analytics", icon: Activity, adminOnly: true }
+    ],
   },
   {
     label: "Editorial",

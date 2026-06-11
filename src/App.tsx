@@ -31,6 +31,7 @@ import ActivityLog from "./pages/admin/ActivityLog";
 import Scheduled from "./pages/admin/Scheduled";
 import MyWork from "./pages/admin/MyWork";
 import SystemConsole from "./pages/admin/SystemConsole";
+import WebAnalytics from "./pages/admin/WebAnalytics";
 
 const queryClient = new QueryClient();
 
@@ -93,6 +94,14 @@ const App = () => (
                 element={
                   <RequireAuth requireAdmin>
                     <SystemConsole />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="web-analytics"
+                element={
+                  <RequireAuth requireAdmin>
+                    <WebAnalytics />
                   </RequireAuth>
                 }
               />
