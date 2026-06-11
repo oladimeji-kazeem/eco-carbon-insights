@@ -19,7 +19,7 @@ export default function ContentItemsList() {
   const [search, setSearch] = useState("");
   const { data, isLoading } = useContentItems(type === "all" ? undefined : type);
   const { ensureItem } = useCMSActions();
-  const { canEdit } = useAuth();
+  const { canEdit, hasRole } = useAuth();
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<{ type: ContentType; slug: string; title: string }>({ type: "page", slug: "", title: "" });
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ export default function ContentItemsList() {
           <h1 className="text-3xl font-bold text-foreground">All content</h1>
           <p className="text-muted-foreground">Every piece of managed content with version status.</p>
         </div>
-        {canEdit && (
+        {(canEdit || hasRole("admin", "curator", "product_manager", "topic_lead", "originator")) && (
           <Button onClick={() => setOpen(true)}><Plus className="w-4 h-4" /> New item</Button>
         )}
       </div>

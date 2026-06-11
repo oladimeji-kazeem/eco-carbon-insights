@@ -33,13 +33,13 @@ const Hero = () => {
               Programmes
             </a>
             <Link to="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-              Admin
+              Log In
             </Link>
-            <a href="#signup">
+            <Link to="/signup">
               <Button variant="heroOutline" size="lg">
                 Get Involved
               </Button>
-            </a>
+            </Link>
           </div>
         </nav>
 

@@ -51,7 +51,7 @@ const App = () => (
             <Route
               path="/admin"
               element={
-                <RequireAuth requireAnyRole={["admin", "editor", "reviewer", "contributor", "viewer"]}>
+                <RequireAuth requireAnyRole={["admin", "editor", "reviewer", "contributor", "viewer", "originator", "developer", "quantifier", "custodian", "quantification_custodian", "copy_editor", "curator", "topic_lead", "product_manager"]}>
                   <AdminLayout />
                 </RequireAuth>
               }

@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "./useAuth";
+import { useAuth, AppRole } from "./useAuth";
 
 export type ContentStatus =
   | "draft" | "in_review" | "changes_requested" | "approved" | "scheduled" | "published" | "archived";
@@ -25,12 +25,20 @@ export interface ContentVersion {
   version_number: number;
   status: ContentStatus;
   value: any;
+  copy_text: string | null;
+  annual_monetary_savings: number | null;
+  annual_carbon_savings: number | null;
   author_id: string | null;
   note: string | null;
   scheduled_for: string | null;
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  content_items?: {
+    title: string;
+    slug: string;
+    type: ContentType;
+  } | null;
 }
 
 export interface ContentReview {
@@ -107,11 +115,11 @@ export const useReviewQueue = () =>
     queryFn: async () => {
       const { data, error } = await supabase
         .from("content_versions")
-        .select("*")
+        .select("*, content_items(title, slug, workflow_stage, assigned_role, assigned_to)")
         .in("status", ["in_review"])
         .order("updated_at", { ascending: true });
       if (error) throw error;
-      return (data ?? []) as ContentVersion[];
+      return (data ?? []) as any[];
     },
   });
 
@@ -136,12 +144,29 @@ export const useMyDrafts = (userId?: string) =>
     queryFn: async () => {
       const { data, error } = await supabase
         .from("content_versions")
-        .select("*")
+        .select("*, content_items(title, slug, type)")
         .eq("author_id", userId!)
         .in("status", ["draft", "changes_requested", "in_review"])
         .order("updated_at", { ascending: false });
       if (error) throw error;
       return (data ?? []) as ContentVersion[];
+    },
+  });
+
+export const useMyQueue = (userId: string | undefined, role: AppRole | null) =>
+  useQuery({
+    enabled: !!userId,
+    queryKey: ["my_queue", userId, role],
+    queryFn: async () => {
+      // In a comprehensive workflow engine, users see what is explicitly assigned to them OR their group
+      const queryStr = role ? `assigned_to.eq.${userId},assigned_role.eq.${role}` : `assigned_to.eq.${userId}`;
+      const { data, error } = await supabase
+        .from("content_items")
+        .select("*, content_versions(*)")
+        .or(queryStr)
+        .order("updated_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as any[]; // Array of items with nested versions
     },
   });
 
@@ -213,7 +238,7 @@ export const useCMSActions = () => {
   };
 
   const createDraft = useMutation({
-    mutationFn: async (input: { item_id: string; value: any; note?: string }) => {
+    mutationFn: async (input: { item_id: string; value: any; note?: string; copy_text?: string; annual_monetary_savings?: number | null; annual_carbon_savings?: number | null }) => {
       if (!user) throw new Error("Not signed in");
       const { data: latest } = await supabase
         .from("content_versions").select("version_number").eq("item_id", input.item_id)
@@ -222,7 +247,8 @@ export const useCMSActions = () => {
       const { data, error } = await supabase.from("content_versions").insert({
         item_id: input.item_id, version_number: next, status: "draft",
         value: input.value, note: input.note ?? null, author_id: user.id,
-      }).select().single();
+        copy_text: input.copy_text, annual_monetary_savings: input.annual_monetary_savings, annual_carbon_savings: input.annual_carbon_savings,
+      } as any).select().single();
       if (error) throw error;
       await audit(input.item_id, data.id, "create_draft", { version_number: next });
       return data as ContentVersion;
@@ -231,10 +257,11 @@ export const useCMSActions = () => {
   });
 
   const updateDraft = useMutation({
-    mutationFn: async (input: { version_id: string; value: any; note?: string }) => {
+    mutationFn: async (input: { version_id: string; value: any; note?: string; copy_text?: string; annual_monetary_savings?: number | null; annual_carbon_savings?: number | null }) => {
       const { error } = await supabase.from("content_versions").update({
         value: input.value, note: input.note, status: "draft",
-      }).eq("id", input.version_id);
+        copy_text: input.copy_text, annual_monetary_savings: input.annual_monetary_savings, annual_carbon_savings: input.annual_carbon_savings,
+      } as any).eq("id", input.version_id);
       if (error) throw error;
       await audit(null, input.version_id, "edit_draft");
     },
@@ -246,6 +273,17 @@ export const useCMSActions = () => {
       const { error } = await supabase.from("content_versions").update({ status: "in_review" }).eq("id", version_id);
       if (error) throw error;
       await audit(null, version_id, "submit_for_review");
+    },
+    onSuccess: invalidate,
+  });
+
+  const advancePipelineStage = useMutation({
+    mutationFn: async (input: { item_id: string; new_stage: number; assigned_role?: AppRole | null }) => {
+      const { error } = await supabase.from("content_items").update({
+        workflow_stage: input.new_stage, assigned_role: input.assigned_role
+      } as any).eq("id", input.item_id);
+      if (error) throw error;
+      await audit(input.item_id, null, "advance_stage", { stage: input.new_stage, role: input.assigned_role });
     },
     onSuccess: invalidate,
   });
@@ -328,5 +366,5 @@ export const useCMSActions = () => {
     onSuccess: invalidate,
   });
 
-  return { createDraft, updateDraft, submitForReview, review, publish, schedule, cancelSchedule, rollback, deleteVersion, ensureItem };
+  return { createDraft, updateDraft, submitForReview, review, publish, schedule, cancelSchedule, rollback, deleteVersion, ensureItem, advancePipelineStage };
 };

@@ -1,9 +1,15 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { LayoutDashboard, FileText, Boxes, Settings as SettingsIcon, Users, LogOut, ArrowLeft, Inbox, Layers, Calendar, History, ClipboardList, Server, Activity } from "lucide-react";
+import { LayoutDashboard, FileText, Boxes, Settings as SettingsIcon, Users, LogOut, ArrowLeft, Inbox, Layers, Calendar, History, ClipboardList, Server, Activity, Plus } from "lucide-react";
+import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useReviewQueue } from "@/hooks/useCMS";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useReviewQueue, useCMSActions, ContentType } from "@/hooks/useCMS";
+import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 
 const navGroups = [
@@ -43,9 +49,16 @@ const navGroups = [
 ];
 
 export default function AdminLayout() {
-  const { user, role, hasRole, signOut } = useAuth();
+  const { user, role, hasRole, signOut, canEdit } = useAuth();
   const navigate = useNavigate();
   const { data: queue } = useReviewQueue();
+  const { ensureItem } = useCMSActions();
+
+  // Global Creation State
+  const [openCreate, setOpenCreate] = useState(false);
+  const [draft, setDraft] = useState<{ type: ContentType; slug: string; title: string }>({ type: "page", slug: "", title: "" });
+
+  const isPrivileged = hasRole("admin", "curator", "product_manager", "topic_lead", "originator");
 
   const handleSignOut = async () => { await signOut(); navigate("/"); };
 
@@ -54,6 +67,15 @@ export default function AdminLayout() {
     if (item.editor) return hasRole("admin", "editor");
     if (item.reviewer) return hasRole("admin", "editor", "reviewer");
     return true;
+  };
+
+  const handleCreateContent = async () => {
+    if (!draft.slug || !draft.title) return toast.error("Slug and title required");
+    try {
+      const item = await ensureItem.mutateAsync(draft);
+      setOpenCreate(false);
+      navigate(`/admin/workspace/${item.id}`);
+    } catch (e) { toast.error((e as Error).message); }
   };
 
   return (
@@ -68,6 +90,15 @@ export default function AdminLayout() {
             </div>
           </Link>
         </div>
+
+        {/* Global Create Actions for Pipeline Roles */}
+        {(canEdit || isPrivileged) && (
+          <div className="p-4 border-b border-border bg-muted/20">
+            <Button className="w-full justify-start shadow-sm" onClick={() => setOpenCreate(true)}>
+              <Plus className="w-4 h-4 mr-2" /> Quick Create
+            </Button>
+          </div>
+        )}
 
         <nav className="flex-1 p-3 space-y-4 overflow-y-auto">
           {navGroups.map((g) => {
@@ -123,6 +154,32 @@ export default function AdminLayout() {
           <Outlet />
         </div>
       </main>
+
+      {/* Global Creation Dialog Hub */}
+      <Dialog open={openCreate} onOpenChange={setOpenCreate}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Rapid Content Generation</DialogTitle></DialogHeader>
+          <div className="space-y-3">
+            <div>
+              <Label>Pipeline Type</Label>
+              <Select value={draft.type} onValueChange={(v) => setDraft({ ...draft, type: v as ContentType })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="page">Page</SelectItem>
+                  <SelectItem value="site_content">Site content block</SelectItem>
+                  <SelectItem value="programme">Programme</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div><Label>Title (Idea Reference)</Label><Input value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} /></div>
+            <div><Label>System Slug</Label><Input value={draft.slug} onChange={(e) => setDraft({ ...draft, slug: e.target.value })} placeholder="hero-title or about-us" /></div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpenCreate(false)}>Cancel</Button>
+            <Button onClick={handleCreateContent} disabled={ensureItem.isPending}>Generate Pipeline Item</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
